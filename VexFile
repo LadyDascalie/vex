@@ -1,0 +1,22 @@
+[vex]
+    all = ["install", "hello"]
+    # Multiple pre and post blocks are fine!
+    [[vex.cmd]]
+    name = "preflight"
+    desc = "does whatever,this is just a test"
+    runs = 'echo "This is the preflight command!"'
+
+    # You can have as many command blocks as you need as well!
+	[[vex.cmd]]
+	name = "install"
+	desc = "installs the program"
+	runs = 'go install'
+	[[vex.cmd]]
+	name = "hello"
+	desc = "prints a nice little message to prove this works!"
+	runs = 'echo "hello world"'
+
+	[[vex.cmd]]
+    name = "postflight"
+    desc = "does whatever,this is just a test"
+    runs = 'echo "This is the postflight command!"'
