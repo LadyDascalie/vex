@@ -5,11 +5,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"github.com/fatih/color"
-	"github.com/ladydascalie/vex/scaffold"
 	"github.com/spf13/cobra"
+	"gitlab.com/LadyDascalie/vex/scaffold"
 )
 
 // VexFileName defines the name of our config file
@@ -113,6 +114,7 @@ func listCommands(cmd *cobra.Command, args []string) {
 // run all commands
 func runCommands(cmd *cobra.Command, args []string) {
 	decodeVexFile()
+	executeEnvironment()
 	executePreCommands()
 	defer executePostCommands()
 
@@ -133,6 +135,7 @@ func runCommands(cmd *cobra.Command, args []string) {
 // run a named command
 func runNamedCommands(cmd *cobra.Command, args []string) {
 	decodeVexFile()
+	executeEnvironment()
 	executePreCommands()
 	defer executePostCommands()
 
@@ -146,7 +149,6 @@ func runNamedCommands(cmd *cobra.Command, args []string) {
 			}
 		}
 	}
-	return
 }
 
 func executePostCommands() {
@@ -169,6 +171,26 @@ func executePreCommands() {
 	}
 }
 
+func executeEnvironment() {
+	if len(vexfile.Vex.Env) > 0 {
+		color.HiGreen("Setting up environment")
+		for _, env := range vexfile.Vex.Env {
+			firstColon := strings.Index(env, ":")
+			if firstColon == -1 {
+				continue
+			}
+			parts := strings.SplitN(env, ":", 2)
+			if len(parts) != 2 {
+				log.Println(parts, "is an invalid environment variable statement")
+				continue
+			}
+			if err := os.Setenv(parts[0], parts[1]); err != nil {
+				log.Fatalf("cannot set environement variable %v with value %v", parts[0], parts[1])
+			}
+		}
+	}
+}
+
 // initVexFile creates a new VexFile
 func initVexFile(cmd *cobra.Command, args []string) {
 	_, err := os.Stat(VexFileName)
@@ -179,7 +201,6 @@ func initVexFile(cmd *cobra.Command, args []string) {
 	if err := ioutil.WriteFile(VexFileName, []byte(scaffold.VexTpl), os.ModePerm); err != nil {
 		log.Fatal(err)
 	}
-	return
 }
 
 // vex the command

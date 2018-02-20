@@ -9,6 +9,7 @@ import (
 // VexFile defines the VexFile structure to follow
 type VexFile struct {
 	Vex struct {
+		Env  []string       `json:"env" toml:"env"`
 		All  []string       `json:"runs" toml:"runs"`
 		Pre  []FormattedCmd `json:"pre" toml:"pre"`
 		Cmd  []FormattedCmd `json:"cmd" toml:"cmd"`
