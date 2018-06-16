@@ -9,8 +9,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/fatih/color"
+	"github.com/ladydascalie/vex/scaffold"
 	"github.com/spf13/cobra"
-	"gitlab.com/LadyDascalie/vex/scaffold"
 )
 
 // VexFileName defines the name of our config file
