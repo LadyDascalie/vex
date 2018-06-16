@@ -8,6 +8,10 @@ Vex is `toml` based, and its syntax is as obvious as possible, so it's really ea
 
 Command line helpers come bundled to help you be productive quickly.
 
+## Install:
+
+`go get github.com/ladydascalie/vex`
+
 ## Usage:
 
 ```text
